@@ -1,10 +1,15 @@
 package lk.anjula.hotelreservationsystem.controller;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
+import lk.anjula.hotelreservationsystem.controller.request.CustomerAuthRequest;
 import lk.anjula.hotelreservationsystem.controller.response.CustomerResponse;
-import lk.anjula.hotelreservationsystem.model.Customer;
+import lk.anjula.hotelreservationsystem.controller.response.MessageResponse;
+import lk.anjula.hotelreservationsystem.exception.UserAlreadyRegisteredException;
+import lk.anjula.hotelreservationsystem.exception.UserNotFoundException;
 import lk.anjula.hotelreservationsystem.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,13 +19,36 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @PostMapping
-    public ResponseEntity<CustomerResponse> createCustomer(@Valid @RequestBody Customer customer) {
-        return ResponseEntity.ok(customerService.createCustomer(customer));
+    @PostMapping("/sign-up")
+    public ResponseEntity<CustomerResponse> authenticate(@Valid @RequestBody CustomerAuthRequest customerAuthRequest) throws UserAlreadyRegisteredException {
+
+        CustomerResponse customerResponse = customerService.create(customerAuthRequest);
+        MessageResponse messageResponse = MessageResponse.builder()
+                .message("Customer registered successfully").build();
+        return new ResponseEntity<>(customerResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CustomerResponse> getCustomer(@PathVariable Long id) {
-        return ResponseEntity.ok(customerService.getCustomer(id));
+    @PostMapping("/sign-in")
+    public ResponseEntity<CustomerResponse> login(@RequestBody CustomerAuthRequest customerAuthRequest) throws UserNotFoundException {
+
+        CustomerResponse customerResponse = customerService.login(customerAuthRequest);
+        return new ResponseEntity<>(customerResponse, HttpStatus.OK);
+    }
+
+//    @GetMapping("/{id}")
+//    public ResponseEntity<CustomerResponse> getCustomer(@PathVariable Long id) {
+//        return ResponseEntity.ok(customerService.getCustomer(id));
+//    }
+
+    @RolesAllowed("ADMIN")
+    @GetMapping("/admin")
+    public String sayHiAdmin() {
+        return "Hi Admin";
+    }
+
+    @RolesAllowed("CUSTOMER")
+    @GetMapping("/customer")
+    public String sayHiShopOwner() {
+        return "Hi Customer";
     }
 }
