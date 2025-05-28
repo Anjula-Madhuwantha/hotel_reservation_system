@@ -1,5 +1,6 @@
 package lk.anjula.hotelreservationsystem.controller;
 
+import jakarta.annotation.security.RolesAllowed;
 import lk.anjula.hotelreservationsystem.controller.response.ReportResponse;
 import lk.anjula.hotelreservationsystem.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,13 @@ public class ReportController {
     @Autowired
     private ReportService reportService;
 
+    @RolesAllowed("ADMIN")
     @GetMapping("/occupancy")
     public ResponseEntity<ReportResponse> getOccupancyReport(@RequestParam String date) {
         return ResponseEntity.ok(reportService.generateOccupancyReport(LocalDate.parse(date)));
     }
 
+    @RolesAllowed("ADMIN")
     @GetMapping("/revenue")
     public ResponseEntity<ReportResponse> getRevenueReport(@RequestParam String date) {
         return ResponseEntity.ok(reportService.generateRevenueReport(LocalDate.parse(date)));

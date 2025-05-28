@@ -9,5 +9,5 @@ public class CheckOutRequest {
     @NotNull
     private Long reservationId;
     private PaymentMethod paymentMethod; // CASH, CREDIT_CARD
-    private double optionalCharges;
+    private Double optionalCharges;
 }

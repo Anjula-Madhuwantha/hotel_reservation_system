@@ -1,5 +1,6 @@
 package lk.anjula.hotelreservationsystem.controller;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lk.anjula.hotelreservationsystem.controller.request.BlockBookingRequest;
 import lk.anjula.hotelreservationsystem.controller.request.CheckInRequest;
@@ -18,32 +19,38 @@ public class ReservationController {
     @Autowired
     private ReservationService reservationService;
 
+    @RolesAllowed({"ADMIN","CUSTOMER"})
     @PostMapping
     public ResponseEntity<ReservationResponse> createReservation(@Valid @RequestBody ReservationRequest request) {
         return ResponseEntity.ok(reservationService.createReservation(request));
     }
 
+    @RolesAllowed({"ADMIN","CUSTOMER"})
     @PutMapping("/{id}")
     public ResponseEntity<ReservationResponse> updateReservation(@PathVariable Long id, @Valid @RequestBody ReservationRequest request) {
         return ResponseEntity.ok(reservationService.updateReservation(id, request));
     }
 
+    @RolesAllowed({"ADMIN","CUSTOMER"})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> cancelReservation(@PathVariable Long id) {
         reservationService.cancelReservation(id);
         return ResponseEntity.ok().build();
     }
 
+    @RolesAllowed({"ADMIN","CUSTOMER"})
     @PostMapping("/check-in")
     public ResponseEntity<ReservationResponse> checkIn(@Valid @RequestBody CheckInRequest request) {
         return ResponseEntity.ok(reservationService.checkIn(request));
     }
 
+    @RolesAllowed({"ADMIN","CUSTOMER"})
     @PostMapping("/check-out")
     public ResponseEntity<BillingResponse> checkOut(@Valid @RequestBody CheckOutRequest request) {
         return ResponseEntity.ok(reservationService.checkOut(request));
     }
 
+    @RolesAllowed({"ADMIN","CUSTOMER"})
     @PostMapping("/block-booking")
     public ResponseEntity<Void> createBlockBooking(@Valid @RequestBody BlockBookingRequest request) {
         reservationService.createBlockBooking(request);

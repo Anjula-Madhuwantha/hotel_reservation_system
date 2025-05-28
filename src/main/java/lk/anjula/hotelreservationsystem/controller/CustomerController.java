@@ -3,20 +3,25 @@ package lk.anjula.hotelreservationsystem.controller;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lk.anjula.hotelreservationsystem.controller.request.CustomerAuthRequest;
+import lk.anjula.hotelreservationsystem.controller.response.CustomerRes;
 import lk.anjula.hotelreservationsystem.controller.response.CustomerResponse;
 import lk.anjula.hotelreservationsystem.controller.response.MessageResponse;
 import lk.anjula.hotelreservationsystem.exception.UserAlreadyRegisteredException;
 import lk.anjula.hotelreservationsystem.exception.UserNotFoundException;
 import lk.anjula.hotelreservationsystem.service.CustomerService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/customers")
 public class CustomerController {
-    @Autowired
+
     private CustomerService customerService;
 
     @PostMapping("/sign-up")
@@ -39,6 +44,20 @@ public class CustomerController {
 //    public ResponseEntity<CustomerResponse> getCustomer(@PathVariable Long id) {
 //        return ResponseEntity.ok(customerService.getCustomer(id));
 //    }
+
+    @RolesAllowed("ADMIN")
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerResponse> getCustomerById(@PathVariable Long id) throws UserNotFoundException {
+        CustomerResponse customer = customerService.getCustomerById(id);
+        return new ResponseEntity<>(customer, HttpStatus.OK);
+    }
+
+    @RolesAllowed("ADMIN")
+    @GetMapping
+    public ResponseEntity<List<CustomerResponse>> getAllCustomers() {
+        List<CustomerResponse> customers = customerService.getAllCustomers();
+        return new ResponseEntity<>(customers, HttpStatus.OK);
+    }
 
     @RolesAllowed("ADMIN")
     @GetMapping("/admin")
