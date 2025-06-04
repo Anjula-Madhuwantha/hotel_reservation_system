@@ -20,38 +20,38 @@ public class RoomController {
     @Autowired
     private RoomService roomService;
 
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({"ADMIN","CUSTOMER"})
     @PostMapping
     public ResponseEntity<RoomResponse> addRoom(@Valid @RequestBody RoomRequest request) {
         return ResponseEntity.ok(roomService.addRoom(request));
     }
 
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({"ADMIN","CUSTOMER"})
     @PutMapping("/{id}")
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long id, @Valid @RequestBody RoomRequest request) {
         return ResponseEntity.ok(roomService.updateRoom(id, request));
     }
 
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({"ADMIN","CUSTOMER"})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
         roomService.deleteRoom(id);
         return ResponseEntity.ok().build();
     }
 
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({"ADMIN","CUSTOMER"})
     @GetMapping("/{id}")
     public ResponseEntity<RoomResponse> getRoomById(@PathVariable Long id) {
         return ResponseEntity.ok(roomService.getRoomById(id));
     }
 
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({"ADMIN","CUSTOMER"})
     @GetMapping("/available")
     public ResponseEntity<List<Room>> getAvailableRooms(@RequestParam RoomType roomType) {
         return ResponseEntity.ok(roomService.getAvailableRooms(roomType));
     }
 
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({"ADMIN","CUSTOMER"})
     @GetMapping
     public ResponseEntity<List<RoomResponse>> getAllRooms() {
         return ResponseEntity.ok(roomService.getAllRooms());
