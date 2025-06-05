@@ -12,6 +12,8 @@ import lk.anjula.hotelreservationsystem.model.*;
 import lk.anjula.hotelreservationsystem.repository.*;
 import lk.anjula.hotelreservationsystem.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -190,6 +192,20 @@ public class ReservationServiceImpl implements ReservationService {
             room.setIsAvailable(false);
             roomRepository.save(room);
         }
+    }
+
+    @Override
+    public Page<ReservationResponse> getAllReservations(String status, Long customerId, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        ReservationStatus reservationStatus = null;
+        if (StringUtils.hasText(status)) {
+            try {
+                reservationStatus = ReservationStatus.valueOf(status.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new ReservationException("Invalid reservation status: " + status);
+            }
+        }
+        Page<Reservation> reservations = reservationRepository.findByFilters(reservationStatus, customerId, startDate, endDate, pageable);
+        return reservations.map(this::mapToReservationResponse);
     }
 
     private ReservationResponse mapToReservationResponse(Reservation reservation) {

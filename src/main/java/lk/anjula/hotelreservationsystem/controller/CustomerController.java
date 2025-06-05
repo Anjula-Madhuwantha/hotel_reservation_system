@@ -10,7 +10,6 @@ import lk.anjula.hotelreservationsystem.exception.UserAlreadyRegisteredException
 import lk.anjula.hotelreservationsystem.exception.UserNotFoundException;
 import lk.anjula.hotelreservationsystem.service.CustomerService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,11 +38,6 @@ public class CustomerController {
         CustomerResponse customerResponse = customerService.login(customerAuthRequest);
         return new ResponseEntity<>(customerResponse, HttpStatus.OK);
     }
-
-//    @GetMapping("/{id}")
-//    public ResponseEntity<CustomerResponse> getCustomer(@PathVariable Long id) {
-//        return ResponseEntity.ok(customerService.getCustomer(id));
-//    }
 
     @RolesAllowed("ADMIN")
     @GetMapping("/{id}")

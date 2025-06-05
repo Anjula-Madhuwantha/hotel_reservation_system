@@ -10,8 +10,13 @@ import lk.anjula.hotelreservationsystem.controller.response.BillingResponse;
 import lk.anjula.hotelreservationsystem.controller.response.ReservationResponse;
 import lk.anjula.hotelreservationsystem.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -55,5 +60,18 @@ public class ReservationController {
     public ResponseEntity<Void> createBlockBooking(@Valid @RequestBody BlockBookingRequest request) {
         reservationService.createBlockBooking(request);
         return ResponseEntity.ok().build();
+    }
+
+    @RolesAllowed({"ADMIN"})
+    @GetMapping
+    public ResponseEntity<Page<ReservationResponse>> getAllReservations(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) Long customerId,
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(reservationService.getAllReservations(status, customerId, startDate, endDate, pageable));
     }
 }
