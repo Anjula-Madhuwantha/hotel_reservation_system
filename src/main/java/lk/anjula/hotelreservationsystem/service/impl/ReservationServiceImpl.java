@@ -231,4 +231,11 @@ public class ReservationServiceImpl implements ReservationService {
         response.setOptionalCharges(billing.getOptionalCharges());
         return response;
     }
+
+    @Override
+    public ReservationResponse getReservationById(Long id) {
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation not found with id: " + id));
+        return mapToReservationResponse(reservation);
+    }
 }

@@ -74,4 +74,10 @@ public class ReservationController {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(reservationService.getAllReservations(status, customerId, startDate, endDate, pageable));
     }
+
+    @RolesAllowed({"ADMIN","CUSTOMER"})
+    @GetMapping("/{id}")
+    public ResponseEntity<ReservationResponse> getReservationById(@PathVariable Long id) {
+        return ResponseEntity.ok(reservationService.getReservationById(id));
+    }
 }

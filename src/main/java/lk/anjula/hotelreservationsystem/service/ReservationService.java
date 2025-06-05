@@ -20,4 +20,5 @@ public interface ReservationService {
     void handleNoShowsAndBilling();
     void createBlockBooking(BlockBookingRequest request);
     Page<ReservationResponse> getAllReservations(String status, Long customerId, LocalDate startDate, LocalDate endDate, Pageable pageable);
+    ReservationResponse getReservationById(Long id);
 }
