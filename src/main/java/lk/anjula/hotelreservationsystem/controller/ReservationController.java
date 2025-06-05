@@ -55,7 +55,7 @@ public class ReservationController {
         return ResponseEntity.ok(reservationService.checkOut(request));
     }
 
-    @RolesAllowed({"ADMIN","CUSTOMER"})
+    @RolesAllowed({"ADMIN","CUSTOMER","TRAVEL_COMPANY"})
     @PostMapping("/block-booking")
     public ResponseEntity<Void> createBlockBooking(@Valid @RequestBody BlockBookingRequest request) {
         reservationService.createBlockBooking(request);

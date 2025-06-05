@@ -64,4 +64,10 @@ public class CustomerController {
     public String sayHiShopOwner() {
         return "Hi Customer";
     }
+
+    @RolesAllowed("TRAVEL_COMPANY")
+    @GetMapping("/travel-company")
+    public String sayHiTravelCompany() {
+        return "Hi Travel company";
+    }
 }
